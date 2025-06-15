@@ -60,6 +60,16 @@ def get_translation(key: str, locale_str: str):
 # 커맨드 번역을 처리하는 클래스
 class MyTranslator(Translator):
     async def translate(self, string: locale_str, locale: discord.Locale, context: TranslationContext) -> str | None:
+        # 명령어 이름, 그룹 이름, 파라미터 이름 등은 번역하지 않도록 설정
+        # None을 반환하면 discord.py가 기본값을 사용합니다.
+        if context.location in (
+            app_commands.TranslationContextLocation.command_name,
+            app_commands.TranslationContextLocation.group_name,
+            app_commands.TranslationContextLocation.parameter_name,
+        ):
+            return None
+            
+        # 그 외(설명 등)는 번역을 시도합니다.
         return get_translation(string.message, str(locale))
 
 # 봇의 권한(Intents) 설정
