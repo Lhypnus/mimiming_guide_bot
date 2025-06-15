@@ -1,3 +1,4 @@
 discord.py
 python-dotenv
 notion-client 
+requests

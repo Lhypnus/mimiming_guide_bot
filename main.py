@@ -102,6 +102,8 @@ async def on_ready():
 
 
 
+
+
 def send_verification_log(user, code, success=True, reason=None):
     if not VERIFICATION_LOG_WEBHOOK_URL:
         print("인증 로그 웹훅 URL이 설정되지 않았습니다.")
@@ -133,7 +135,7 @@ def is_valid_code_format(code: str) -> bool:
     return bool(re.match(r'^#[A-Za-z0-9]{5}$', code))
 
 @bot.tree.command(
-    name=locale_str("verify"),
+    name="verify",
     description=locale_str("Get the 'Buyer' role by entering your skin code.")
 )
 @commands.cooldown(1, 30, commands.BucketType.user)  # 30초당 1번만 사용 가능
