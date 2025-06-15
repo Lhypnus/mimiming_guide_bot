@@ -1,0 +1,17 @@
+{
+    "verify": "Verify",
+    "Get the 'Buyer' role by entering your skin code.": "Get the 'Buyer' role by entering your skin code.",
+    "verify_success": "Successfully verified with code `{code}`! You have been given the '{role_name}' role.",
+    "role_name_buyer": "Buyer",
+    "verify_code_not_found": "Code `{code}` not found. Please check and try again.",
+    "verify_already_verified": "You already have the '{role_name}' role and are verified.",
+    "verify_role_not_found_error": "Error: Could not find '{role_name}' role in the server. Please contact an administrator.",
+    "verify_notion_api_error": "An error occurred while verifying the code. Please contact an administrator.",
+    "verify_discord_api_error": "An error occurred while assigning the role. Please contact an administrator.",
+    "verify_dm_error": "This command can only be used in server channels.",
+    "verify_code_already_used": "This code has already been used by another user. Please contact an administrator.",
+    "verify_wrong_channel_error": "This command can only be used in the {channel_mention} channel.",
+    "verify_invalid_format": "Invalid code format. (Example: #A1b2C)",
+    "verify_too_many_attempts": "Too many attempts. Please try again in an hour.",
+    "verify_cooldown": "Please wait before trying again. ({seconds} seconds remaining)"
+} 

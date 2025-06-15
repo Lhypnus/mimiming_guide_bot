@@ -1,0 +1,17 @@
+{
+    "verify": "验证",
+    "Get the 'Buyer' role by entering your skin code.": "输入您的皮肤代码以获取`购买者`角色。",
+    "verify_success": "使用代码 `{code}` 验证成功！您已获得`{role_name}`角色。",
+    "role_name_buyer": "购买者",
+    "verify_code_not_found": "未找到代码 `{code}`。请检查后重试。",
+    "verify_already_verified": "您已经拥有`{role_name}`角色，已通过验证。",
+    "verify_role_not_found_error": "错误：在服务器中找不到`{role_name}`角色。请联系管理员。",
+    "verify_notion_api_error": "验证代码时发生错误。请联系管理员。",
+    "verify_discord_api_error": "分配角色时发生错误。请联系管理员。",
+    "verify_dm_error": "此命令只能在服务器频道中使用。",
+    "verify_code_already_used": "此代码已被其他用户使用。请联系管理员。",
+    "verify_wrong_channel_error": "此命令只能在 {channel_mention} 频道中使用。",
+    "verify_invalid_format": "代码格式不正确。 (例如: #A1b2C)",
+    "verify_too_many_attempts": "尝试次数过多。请一小时后重试。",
+    "verify_cooldown": "请稍后重试。 (还剩 {seconds} 秒)"
+} 

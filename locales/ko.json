@@ -1,0 +1,17 @@
+{
+    "verify": "인증",
+    "Get the 'Buyer' role by entering your skin code.": "구매하신 스킨의 코드를 입력하여 '구매자' 역할을 받습니다.",
+    "verify_success": "`{code}` 코드로 성공적으로 인증되었습니다! '{role_name}' 역할이 부여되었습니다.",
+    "role_name_buyer": "구매자",
+    "verify_code_not_found": "`{code}` 코드를 찾을 수 없습니다. 다시 확인하고 시도해주세요.",
+    "verify_already_verified": "이미 '{role_name}' 역할을 가지고 있어 인증된 상태입니다.",
+    "verify_role_not_found_error": "오류: 서버에서 '{role_name}' 역할을 찾을 수 없습니다. 관리자에게 문의해주세요.",
+    "verify_notion_api_error": "코드를 인증하는 중 오류가 발생했습니다. 관리자에게 문의해주세요.",
+    "verify_discord_api_error": "역할을 부여하는 중 오류가 발생했습니다. 관리자에게 문의해주세요.",
+    "verify_dm_error": "이 명령어는 서버 채널에서만 사용할 수 있습니다.",
+    "verify_code_already_used": "이미 다른 사용자가 인증한 코드입니다. 관리자에게 문의해주세요.",
+    "verify_wrong_channel_error": "이 명령어는 {channel_mention} 채널에서만 사용할 수 있습니다.",
+    "verify_invalid_format": "올바른 코드 형식이 아닙니다. (예: #A1b2C)",
+    "verify_too_many_attempts": "너무 많은 시도를 하셨습니다. 1시간 후에 다시 시도해주세요.",
+    "verify_cooldown": "잠시 후 다시 시도해주세요. ({seconds}초 남음)"
+} 

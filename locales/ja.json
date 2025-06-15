@@ -1,0 +1,17 @@
+{
+    "verify": "認証",
+    "Get the 'Buyer' role by entering your skin code.": "スキンコードを入力して「購入者」ロールを取得します。",
+    "verify_success": "コード `{code}` で認証に成功しました！「{role_name}」ロールが付与されました。",
+    "role_name_buyer": "購入者",
+    "verify_code_not_found": "コード `{code}` が見つかりません。確認して再度お試しください。",
+    "verify_already_verified": "すでに「{role_name}」ロールを持っているため、認証済みです。",
+    "verify_role_not_found_error": "エラー：サーバーで「{role_name}」ロールが見つかりません。管理者にお問い合わせください。",
+    "verify_notion_api_error": "コードの認証中にエラーが発生しました。管理者にお問い合わせください。",
+    "verify_discord_api_error": "ロールの付与中にエラーが発生しました。管理者にお問い合わせください。",
+    "verify_dm_error": "このコマンドはサーバーチャンネルでのみ使用できます。",
+    "verify_code_already_used": "このコードはすでに他のユーザーによって使用されています。管理者にお問い合わせください。",
+    "verify_wrong_channel_error": "このコマンドは {channel_mention} チャンネルでのみ使用できます。",
+    "verify_invalid_format": "コードの形式が正しくありません。 (例: #a1B2c)",
+    "verify_too_many_attempts": "試行回数が多すぎます。1時間後に再度お試しください。",
+    "verify_cooldown": "しばらく待ってから再度お試しください。 (残り {seconds} 秒)"
+} 
