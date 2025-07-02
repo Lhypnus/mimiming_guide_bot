@@ -19,7 +19,7 @@ DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 NOTION_API_KEY = os.getenv('NOTION_API_KEY')
 NOTION_BUYER_DATABASE_ID = os.getenv('NOTION_BUYER_DATABASE_ID')
 VERIFICATION_CHANNEL_ID = os.getenv('VERIFICATION_CHANNEL_ID')
-VERIFICATION_LOG_WEBHOOK_URL = os.getenv('VERIFICATION_LOG_WEBHOOK_URL')
+LOG_WEBHOOK_URL = os.getenv('LOG_WEBHOOK_URL')
 
 # 다국어 지원을 위한 설정
 LOCALES = {}
@@ -115,7 +115,7 @@ async def on_ready():
 
 
 def send_verification_log(user, code, success=True, reason=None):
-    if not VERIFICATION_LOG_WEBHOOK_URL:
+    if not LOG_WEBHOOK_URL:
         print("인증 로그 웹훅 URL이 설정되지 않았습니다.")
         return
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -130,7 +130,7 @@ def send_verification_log(user, code, success=True, reason=None):
     content = f"{emoji} {user.mention} (`{user.id}`) | {code_str} | {now}{reason_str}"
     data = {"content": content}
     try:
-        requests.post(VERIFICATION_LOG_WEBHOOK_URL, json=data)
+        requests.post(LOG_WEBHOOK_URL, json=data)
     except Exception as e:
         print(f"웹훅 전송 실패: {e}")
 
@@ -235,15 +235,65 @@ async def verify(interaction: discord.Interaction, code: str):
         page_data = query_result["results"][0]
         page_id = page_data["id"]
         
-        # '디코' 속성이 비어있는지 확인
-        dico_property = page_data.get("properties", {}).get("디코", {})
-        if dico_property.get("rich_text"): # rich_text 리스트에 내용이 있다면 이미 사용된 코드
+        # '✅ Buyer 역할' 체크박스 속성 확인
+        buyer_role_property = page_data.get("properties", {}).get("✅ Buyer 역할", {})
+        if buyer_role_property.get("checkbox"): # 체크박스가 true면 이미 사용된 코드
             message = get_translation("verify_code_already_used", locale)
             await interaction.followup.send(message, ephemeral=True)
             send_verification_log(interaction.user, code, success=False, reason="이미 사용됨")
             return
 
-        # 사용자 ID 업데이트 (실패해도 역할 부여는 진행)
+        # '디스코드' 속성 확인 (이미 다른 사용자가 사용했는지 체크)
+        dico_property = page_data.get("properties", {}).get("디코", {})
+        stored_user_id = ""
+        if dico_property.get("rich_text"):
+            stored_user_id = dico_property.get("rich_text", [{}])[0].get("text", {}).get("content", "")
+        
+        if stored_user_id:  # 디스코드 속성이 이미 채워져 있는 경우
+            if stored_user_id == str(interaction.user.id):
+                # 상황 1-1: 같은 사용자 → 역할 부여하면서 체크박스 체크
+                try:
+                    await notion.pages.update(
+                        page_id=page_id,
+                        properties={
+                            "✅ Buyer 역할": {
+                                "checkbox": True  # 체크박스만 체크
+                            }
+                        }
+                    )
+                except Exception as e:
+                    print(f"Error updating checkbox for code '{code}': {e}")
+                
+                # 역할 부여
+                await interaction.user.add_roles(buyer_role)
+                message = get_translation("verify_success", locale).format(code=code, role_name=translated_role_name)
+                await interaction.followup.send(message, ephemeral=True)
+                send_verification_log(interaction.user, code, success=True)
+                return
+            else:
+                # 상황 1-2: 다른 사용자 → 거부하고 관리자에게 알림
+                message = get_translation("verify_code_already_used", locale)
+                await interaction.followup.send(message, ephemeral=True)
+                
+                # 상세한 로그로 관리자에게 알림
+                admin_log_message = (
+                    f"🚨 **의심스러운 인증 시도**\n"
+                    f"🔑 코드: `{code}`\n"
+                    f"👤 시도자/노션기록: {interaction.user.mention} (`{interaction.user.id}`) / ({stored_user_id})\n"
+                    f"⚠️ 기존 노션에 기록된 id와 시도자가 다릅니다.\n"
+                )
+                
+                if LOG_WEBHOOK_URL:
+                    try:
+                        requests.post(LOG_WEBHOOK_URL, json={"content": admin_log_message})
+                    except Exception as e:
+                        print(f"관리자 알림 전송 실패: {e}")
+                
+                # 기본 로그는 제거 (상세 관리자 알림으로 대체)
+                return
+
+        # 디스코드 속성이 비어있는 경우 → 정상적인 첫 인증
+        # 사용자 ID 및 체크박스 업데이트 (실패해도 역할 부여는 진행)
         try:
             await notion.pages.update(
                 page_id=page_id,
@@ -256,6 +306,9 @@ async def verify(interaction: discord.Interaction, code: str):
                                 }
                             }
                         ]
+                    },
+                    "✅ Buyer 역할": {
+                        "checkbox": True  # 체크박스를 true로 설정
                     }
                 }
             )
